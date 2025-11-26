@@ -10,20 +10,17 @@ from random import randint
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
-# Load environment variables from .env
+
 load_dotenv()
 
 app = Flask(__name__, static_folder='static')
 
-
-# SECRET KEY
 
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
 if not app.secret_key:
     raise RuntimeError("FLASK_SECRET_KEY is not set")
 
 
-# CACHE CONTROL HEADERS
 
 @app.after_request
 def add_cache_control_headers(response):
@@ -51,13 +48,10 @@ if not SENDER_EMAIL or not SENDER_NAME:
     raise RuntimeError("SENDER_EMAIL and SENDER_NAME must be set in .env")
 
 
-# FILE UPLOADS
 
 UPLOAD_FOLDER = 'static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-
-# MYSQL CONFIG
 
 app.config['MYSQL_HOST'] = os.getenv("MYSQL_HOST", "localhost")
 app.config['MYSQL_USER'] = os.getenv("MYSQL_USER")
@@ -70,7 +64,7 @@ if not app.config['MYSQL_USER'] or not app.config['MYSQL_PASSWORD'] or not app.c
 mysql = MySQL(app)
 
 
-# ROUTES
+#routes
 
 @app.route('/')
 def home():
@@ -175,12 +169,12 @@ def add_to_cart(product_id):
     user_id = session['user_id']
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
-    # Check if product exists
+   
     cursor.execute("SELECT * FROM products WHERE id = %s", (product_id,))
     product = cursor.fetchone()
 
     if product:
-        # Check if item is already in cart
+       
         cursor.execute("SELECT * FROM cart WHERE user_id = %s AND product_id = %s",
                        (user_id, product_id))
         existing_item = cursor.fetchone()
@@ -194,7 +188,7 @@ def add_to_cart(product_id):
                            (user_id, product_id, 1))
 
         mysql.connection.commit()
-        flash("Item added to cart successfully!")  # Notification
+        flash("Item added to cart successfully!") 
     else:
         flash("Product not found.")
 
@@ -590,7 +584,6 @@ def checkout():
     user_id = session['user_id']
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     
-    # 1. Get items from Cart joined with Product price
     cursor.execute("""
         SELECT cart.product_id, cart.quantity, products.price 
         FROM cart 
@@ -626,7 +619,6 @@ def orders():
     user_id = session['user_id']
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     
-    # Fetch orders with product details
     cursor.execute("""
         SELECT orders.id, orders.status, orders.price, orders.quantity, orders.order_date, 
                products.name, products.image_url 
