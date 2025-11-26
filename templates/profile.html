@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - e Gift Shopee</title>
+    <style>
+        body {
+            font-family: "Comic Sans MS", "Comic Sans", cursive;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1500px;
+            width: 90%;
+            padding: 50px;
+            background: #ffffff;
+            border-radius: 30px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+            position: relative;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .user-icon {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .header h1 {
+            font-size: 2.3em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .row {
+            display: flex;
+            align-items: center;
+            padding: 40px;
+            margin: 15px 0;
+            background: #ffe6e6;
+            border-radius: 30px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 1.5em;
+            gap: 25px;
+            transition: transform 0.2s;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .row:hover {
+            transform: translateY(-3px);
+        }
+
+        .row img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .back-home {
+            font-size: 1.2rem;
+            color: #0c0f11;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .back-home:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://cdn-icons-png.flaticon.com/512/8792/8792047.png" alt="User Icon" class="user-icon">
+            <h1>Welcome, {{ user.name }}!</h1>
+        </div>
+        <a href="{{ url_for('edit_user_details') }}" style="text-decoration: none; color: inherit;">
+            <div class="row">
+                <img src="https://icons.veryicon.com/png/o/system/fun-music-teaching-management-background/personal-information-icon-16.png" alt="User Icon">
+                <span>Personal Information             ></span>
+            </div>
+        </a> 
+        <a href="{{ url_for('view_cart') }}" style="text-decoration: none; color: inherit;">
+            <div class="row">
+                <img src="https://cdn-icons-png.flaticon.com/512/3649/3649552.png" alt="Cart Icon">
+                <span>Manage Your Cart             ></span>
+            </div>
+        </a>
+        <a href="{{ url_for('update_password') }}" style="text-decoration: none; color: inherit;">
+            <div class="row">
+                <img src="https://static-00.iconduck.com/assets.00/account-settings-icon-512x442-yjkkxj65.png" alt="Settings Icon">
+                <span>Account Settings             ></span>
+            </div>
+        </a>
+        <!-- Back to Home Link -->
+        <a href="{{ url_for('main') }}" class="back-home">&lt; Back to Home</a>
+    </div>
+</body>
+</html>

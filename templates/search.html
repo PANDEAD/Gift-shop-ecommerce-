@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results - Gift Shop</title>
+    <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+        body {
+            background-color: #ffdddd;
+            color: #333;
+        }
+
+        /* Container for search results */
+        .container {
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #ff6f61;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        /* Flash Messages */
+        .flashes {
+            list-style-type: none;
+            padding: 10px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            margin: 10px 0;
+        }
+        .flash {
+            padding: 5px;
+        }
+
+        /* Gift Grid */
+        .gift-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            padding: 20px;
+        }
+        .gift-item {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .gift-item:hover {
+            transform: scale(1.05);
+        }
+        .gift-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .gift-item h4 {
+            margin: 10px 0;
+            font-size: 1rem;
+            color: #333;
+        }
+        .gift-item .price {
+            color: #ff6f61;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        /* No Results Message */
+        .no-results {
+            font-size: 1.2rem;
+            color: #777;
+            margin-top: 20px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #ffdde1;
+            color: #333;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for message in messages %}
+                    <li class="flash">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Search Results Container -->
+    <div class="container">
+        <h1>Search Results for "{{ query }}"</h1>
+
+        {% if search_results %}
+            <div class="gift-grid">
+                {% for product in search_results %}
+                    <div class="gift-item">
+                        <img src="{{ url_for('static', filename=product['image_url'].replace('static/', '')) }}" alt="{{ product['name'] }}">
+                        <h4>{{ product['name'] }}</h4>
+                        <p class="price">₹{{ product['price'] }}</p>
+                        <form method="POST" action="{{ url_for('add_to_cart', product_id=product['id']) }}">
+                            <button type="submit">Add to Cart</button>
+                        </form>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="no-results">No products found. Try searching for something else.</p>
+        {% endif %}
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2024 GiftShop. All Rights Reserved.</p>
+    </div>
+</body>
+</html>

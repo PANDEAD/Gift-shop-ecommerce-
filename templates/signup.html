@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - e gift shopee</title>
+    <style>
+        body {
+            font-family: "Comic Sans MS", "Comic Sans", cursive;
+            background-image: url('https://images.pexels.com/photos/3309659/pexels-photo-3309659.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+            background-size: cover;
+            background-position: center;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .signup-container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            text-align: center;
+            margin-left: 400px
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #444;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .signup-btn {
+            background-color: #f09595;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .welcome-section {
+            background-color: #f09595;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .welcome-section h2 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+
+        .welcome-section p {
+            font-size: 0.9em;
+            margin: 10px 0;
+        }
+
+        .sign-in-link {
+            color: #f76c6c;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .sign-in-link:hover {
+            text-decoration: underline;
+        }
+
+        .existing-account {
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.85em;
+            display: none;
+            margin: -5px 0 10px;
+        }
+    </style>
+    <script>
+        function validateSignUpForm() {
+            let name = document.getElementById("name");
+            let email = document.getElementById("email");
+            let password = document.getElementById("password");
+            let confirmPassword = document.getElementById("confirm-password");
+
+            let emailError = document.getElementById("email-error");
+            let emptyFieldError = document.getElementById("empty-field-error");
+            let passwordMatchError = document.getElementById("password-match-error");
+
+            emailError.style.display = "none";
+            emptyFieldError.style.display = "none";
+            passwordMatchError.style.display = "none";
+
+            let isValid = true;
+
+            if (!name.value || !email.value || !password.value || !confirmPassword.value) {
+                emptyFieldError.style.display = "block";
+                isValid = false;
+            }
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (email.value && !emailPattern.test(email.value)) {
+                emailError.style.display = "block";
+                isValid = false;
+            }
+
+            if (password.value && confirmPassword.value && password.value !== confirmPassword.value) {
+                passwordMatchError.style.display = "block";
+                isValid = false;
+            }
+
+            return isValid;
+        }
+    </script>
+</head>
+<body>
+    <div class="signup-container">
+        <div class="welcome-section">
+            <h2>Welcome Back!</h2>
+            <p>To keep connected, please sign up with your personal info.</p>
+        </div>
+        <h1>Create Account</h1>
+        <form action="/signup" method="POST" onsubmit="return validateSignUpForm()">
+            <input type="text" class="input-field" id="name" name="name" placeholder="Name" required>
+            <input type="email" class="input-field" id="email" name="email" placeholder="Email" required>
+            <div id="email-error" class="error-message">Please enter a valid email address.</div>
+            <input type="password" class="input-field" id="password" name="password" placeholder="Password" required>
+            <input type="password" class="input-field" id="confirm-password" name="confirm-password" placeholder="Re-enter Password" required>
+            <div id="password-match-error" class="error-message">Passwords do not match.</div>
+            <div id="empty-field-error" class="error-message">All fields are required.</div>
+            <button type="submit" class="signup-btn">Sign Up</button>
+        </form>
+        <div class="existing-account">
+            Already have an account? <a href="{{ url_for('login') }}" class="sign-in-link">Sign in</a>
+        </div>
+    </div>
+</body>
+</html>

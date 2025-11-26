@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product - e Gift Shopee</title>
+    <style>
+        body {
+            font-family: "Comic Sans MS", "Comic Sans", cursive;
+            background-color: #f5f5f5;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar styling */
+        .sidebar {
+            position: fixed;
+            left: -250px; /* Hidden by default */
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #333;
+            color: white;
+            padding-top: 60px;
+            transition: left 0.3s;
+            z-index: 100;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+        }
+
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+
+        .sidebar .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Sidebar toggle button */
+        .sidebar-toggle {
+            font-size: 2rem;
+            cursor: pointer;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 101;
+        }
+
+        /* Container for the form */
+        .container {
+            max-width: 700px;
+            margin: 100px auto;
+            padding: 20px;
+            background-color: #f8ebeb;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .container h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #2c1515;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-size: 1.2rem;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ffe9e9;
+            border-radius: 5px;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .button-container button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+
+        .button-container .save-btn {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .button-container .cancel-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+        .flashes {
+            list-style-type: none;
+            padding: 10px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            margin: 10px 0;
+            position: absolute;  /* Positioned at the top of the page */
+            width: 100%;
+            top: 0;
+            z-index: 1000;  /* Ensure it is on top of other content */
+            left: 0;
+            text-align: center; /* Center-align text */
+        }
+
+        .flash {
+            padding: 5px;
+        }
+    </style>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-250px';
+            } else {
+                sidebar.style.left = '0px';
+            }
+        }
+
+        function handleCancel() {
+            document.querySelector("form").reset();
+        }
+    </script>
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for message in messages %}
+                    <li class="flash">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <span class="close-btn" onclick="toggleSidebar()">&times;</span>
+        <a href="{{ url_for('update_admin_password') }}">Update Password</a>
+        <a href="{{ url_for('admin_logout') }}">Logout</a>
+    </div>
+
+    <!-- Sidebar toggle button -->
+    <span class="sidebar-toggle" onclick="toggleSidebar()">&#9776;</span>
+
+    <!-- Form container -->
+    <div class="container">
+        <h1>Add Product</h1>
+        <form action="/add_product" method="POST" enctype="multipart/form-data">
+            <label for="name">Product Name</label>
+            <input type="text" id="name" name="name" placeholder="Enter product name" required>
+
+            <label for="price">Price</label>
+            <input type="number" id="price" name="price" placeholder="Enter product price" required>
+
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="4" placeholder="Enter product description"></textarea>
+
+            <label for="status">Status</label>
+            <select id="status" name="status">
+                <option value="active">Active</option>
+            </select>
+
+            <label for="category">Product Category</label>
+            <select id="category" name="category">
+                <option value="couple">Couple</option>
+                <option value="kids">Kids</option>
+                <option value="men">Men</option>
+                <option value="women">Women</option>
+            </select>
+
+            <label for="image">Attach Product Image</label>
+            <input type="file" id="image" name="image">
+
+            <div class="button-container">
+                <button type="submit" class="save-btn">Save</button>
+                <button type="button" class="cancel-btn" onclick="handleCancel()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

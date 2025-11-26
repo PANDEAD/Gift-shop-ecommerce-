@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>e gift shopee</title>
+    <style>
+        body {
+            font-family: "Comic Sans MS", "Comic Sans", cursive;
+            background-image: url('https://images.pexels.com/photos/3309659/pexels-photo-3309659.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+            background-size: cover;
+            background-position: center;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 350px;
+            text-align: center;
+            margin-left: 400px
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .login-btn {
+            background-color: #f09595;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 20px; 
+        }
+
+        .forgot-password {
+            font-size: 0.9em;
+            color: #f76c6c;
+            text-decoration: none;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .remember-me {
+            font-size: 0.9em;
+            margin-top: 20px; 
+            margin-bottom: 20px;
+        }
+
+        .website-name {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .sign-up-message {
+            font-size: 0.9em;
+            margin-top: 20px; 
+        }
+        .sign-up-link {
+            color: #f76c6c;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .admin-login {
+            font-size: 0.9em;
+            color: #f76c6c;
+            text-decoration: none;
+            margin-top: 15px;
+            display: inline-block;
+        }
+
+        .admin-login:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.85em;
+            display: none;
+            margin: -5px 0 10px;
+        }
+    </style>
+    <script>
+        function validateLoginForm() {
+            let email = document.getElementById("email");
+            let password = document.getElementById("password");
+            let emailError = document.getElementById("email-error");
+            let emptyFieldError = document.getElementById("empty-field-error");
+
+            // Reset error messages
+            emailError.style.display = "none";
+            emptyFieldError.style.display = "none";
+
+            let isValid = true;
+
+            // Check if both fields are filled
+            if (!email.value || !password.value) {
+                emptyFieldError.style.display = "block";
+                isValid = false;
+            }
+
+            // Email validation
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (email.value && !emailPattern.test(email.value)) {
+                emailError.style.display = "block";
+                isValid = false;
+            }
+
+            return isValid;
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="website-name">E Gift Shopee</div>
+        <h1>Login</h1>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li style="color: red; font-size: 1.1em;">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <!-- Login Form Starts -->
+        <form action="/login" method="POST" onsubmit="return validateLoginForm()">
+            <input type="email" class="input-field" id="email" name="email" placeholder="Email Address" required>
+            <div id="email-error" class="error-message">Please enter a valid email address.</div>
+            <input type="password" class="input-field" id="password" name="password" placeholder="Enter the password" required>
+            <div id="empty-field-error" class="error-message">Both fields are required.</div>
+            <a href="{{ url_for('forgot_password') }}" class="forgot-password">Forgot Password?</a>
+            <div class="remember-me">
+                <input type="checkbox"> Remember me
+            </div>
+            <button type="submit" class="login-btn">LOGIN</button>
+        </form>
+        <!-- Login Form Ends -->
+
+        <p class="sign-up-message">Don't have an account yet? <a href="{{ url_for('signup') }}" class="sign-up-link">Sign Up</a></p>
+        <a href="{{ url_for('admin_login') }}" class="admin-login">Login as Admin</a>
+    </div>
+</body>
+</html>

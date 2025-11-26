@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Password</title>
+    <style>
+        body {
+            font-family: "Comic Sans MS", "Comic Sans", cursive;
+            background-color: #f5f5f5;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Container for the form */
+        .container {
+            max-width: 500px;
+            margin: 100px auto;
+            padding: 20px;
+            background-color: #f8ebeb;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .container h1 {
+            text-align: center;
+            font-size: 2rem;
+            color: #2c1515;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-size: 1.2rem;
+        }
+
+        input {
+            width: calc(100% - 22px); /* Adjusted for padding and border */
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ffe9e9;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .button-container button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+
+        .button-container .save-btn {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .button-container .cancel-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .back-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .back-container a {
+            text-decoration: none;
+            color: #333;
+            font-size: 1rem;
+            background-color: #e0e0e0;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+        .back-container a:hover {
+            background-color: #d0d0d0;
+        }
+        /* Flash Message Style */
+        .flashes {
+            list-style-type: none;
+            padding: 10px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            margin: 10px 0;
+            position: absolute;  /* Positioned at the top of the page */
+            width: 100%;
+            top: 0;
+            z-index: 1000;  /* Ensure it is on top of other content */
+            left: 0;
+            text-align: center; /* Center-align text */
+        }
+
+        .flash {
+            padding: 5px;
+        }
+    </style>
+    <script>
+        function handleInputChange() {
+            const oldPassword = document.getElementById("old-password").value.trim();
+            const newPassword = document.getElementById("new-password").value.trim();
+            const reenterPassword = document.getElementById("reenter-password").value.trim();
+            const cancelButton = document.querySelector(".cancel-btn");
+
+            cancelButton.disabled = !(oldPassword || newPassword || reenterPassword);
+        }
+        function handleCancel() {
+            const form = document.querySelector("form");
+            form.reset();
+            document.querySelector(".cancel-btn").disabled = true;
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+            const inputs = document.querySelectorAll("input");
+            inputs.forEach(input => input.addEventListener("input", handleInputChange));
+        });
+    </script>
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for message in messages %}
+                    <li class="flash">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Form container -->
+    <div class="container">
+        <h1>Update Password</h1>
+        <form action="{{ url_for('update_admin_password') }}" method="POST">
+            <label for="old-password">Old Password</label>
+            <input type="password" id="old-password" name="current_password" placeholder="Enter old password" required>
+
+            <label for="new-password">New Password</label>
+            <input type="password" id="new-password" name="new_password" placeholder="Enter new password" required>
+
+            <label for="reenter-password">Re-enter New Password</label>
+            <input type="password" id="reenter-password" name="confirm_password" placeholder="Re-enter new password" required>
+
+            <div class="button-container">
+                <button type="submit" class="save-btn">Save</button>
+                <button type="button" class="cancel-btn" onclick="handleCancel()" disabled>Cancel</button>
+            </div>
+        </form>
+
+        <div class="back-container">
+            <a href="{{ url_for('add_product') }}">Back</a>
+        </div>
+    </div>
+
+</body>
+</html>

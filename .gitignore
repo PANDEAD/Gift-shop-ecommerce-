@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+egift/
+.vscode/
+.DS_Store
+pass.py
+.env

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gift Shop - Home</title>
+    <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+        body {
+            background-color: #ffdddd;
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #ffdde1;
+            padding: 10px 20px;
+            color: #333;
+        }
+        .header .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ff6f61;
+        }
+        .header form {
+            display: flex;
+            flex: 1;
+            max-width: 600px;
+        }
+        .header input[type="text"] {
+            flex: 1;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ffc2c2;
+            color: #333;
+            font-size: 1rem;
+        }
+        .header button {
+            background-color: #ff6f61;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-left: 10px;
+        }
+        .header button:hover {
+            background-color: #ff8367;
+        }
+
+        /* Filters Button and Dropdown */
+        .filters-button {
+            background-color: #ff6f61;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 0.9rem;
+            margin-left: 15px;
+            position: relative;
+        }
+        .filters-button:hover {
+            background-color: #ff8367;
+        }
+        .filters-dropdown {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            min-width: 160px;
+            z-index: 1;
+            margin-top: 10px;
+        }
+        .filters-dropdown a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .filters-dropdown a:hover {
+            background-color: #ddd;
+        }
+
+        /* Dropdown for User Profile */
+        .user-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .user-dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            min-width: 160px;
+            z-index: 1;
+        }
+        .user-dropdown-menu a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .user-dropdown-menu a:hover {
+            background-color: #ddd;
+        }
+
+        /* Header Image Section */
+        .header-image {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .header-image img {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+        }
+
+        /* Gift Grid */
+        .gift-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            padding: 20px;
+        }
+        .gift-item {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .gift-item:hover {
+            transform: scale(1.05);
+        }
+        .gift-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .gift-item h4 {
+            margin: 10px 0;
+            font-size: 1rem;
+            color: #333;
+        }
+        .gift-item .price {
+            color: #ff6f61;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        /* Footer Styles */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #ffdde1;
+            color: #333;
+            width: 100%;
+        }
+
+        /* Flash Message Style */
+        .flashes {
+            list-style-type: none;
+            padding: 10px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            margin: 10px 0;
+        }
+        .flash {
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Flash Messages Section -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for message in messages %}
+                    <li class="flash">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">GiftShop</div>
+        <form action="{{ url_for('search') }}" method="GET">
+            <input type="text" name="query" placeholder="Search best gift for ur best ones" required>
+            <button type="submit">Search</button>
+        </form>
+        <div class="dropdown">
+            <button class="filters-button" onclick="toggleFiltersDropdown()">Filters</button>
+            <div id="filters-dropdown" class="filters-dropdown">
+                {% for category in categories %}
+                    <a href="{{ url_for('filter', category=category) }}">{{ category }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="icons">
+            {% if 'user_id' in session %}
+                <form action="{{ url_for('view_cart') }}" method="GET" style="display: inline;">
+                    <button class="header-button">🛒 Cart ({{ cart_count }})</button>
+                </form>
+            {% else %}
+                <form action="{{ url_for('login') }}" method="GET" style="display: inline;">
+                    <button class="header-button">🛒 Cart</button>
+                </form>
+            {% endif %}
+            <form action="#" method="GET" style="display: inline;">
+                <button class="header-button">📦 Ordered Items</button>
+            </form>
+            <div class="user-dropdown">
+                <button class="icon" onclick="toggleUserDropdown()">👤</button>
+                <div id="user-dropdown-menu" class="user-dropdown-menu">
+                    <a href="{{ url_for('profile') }}">Profile</a>
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Image Section -->
+    <div class="header-image">
+        <img src="https://images.pexels.com/photos/1303082/pexels-photo-1303082.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Gift Shop Banner">
+    </div>
+
+    <!-- Featured Products Section -->
+    <div class="random-products">
+        <h2> Featured Products</h2>
+        <div class="gift-grid">
+            {% for product in random_products %}
+                <div class="gift-item">
+                    <img src="{{ url_for('static', filename=product['image_url'].replace('static/', '')) }}" alt="{{ product['name'] }}">
+                    <h4>{{ product['name'] }}</h4>
+                    <p class="price">₹{{ product['price'] }}</p>
+                    <form method="POST" action="{{ url_for('add_to_cart', product_id=product['id']) }}">
+                        <button type="submit">Add to Cart</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <div class="footer">
+        <p>&copy; 2024 GiftShop. All Rights Reserved.</p>
+    </div>
+
+    <!-- JavaScript for Dropdowns -->
+    <script>
+        function toggleFiltersDropdown() {
+            var dropdown = document.getElementById("filters-dropdown");
+            dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+        }
+
+        function toggleUserDropdown() {
+            var dropdown = document.getElementById("user-dropdown-menu");
+            dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+        }
+    </script>
+</body>
+</html>

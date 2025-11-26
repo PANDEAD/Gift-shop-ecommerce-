@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter OTP - e Gift Shopee</title>
+    <style>
+        body {
+            font-family: "Comic Sans MS", "Comic Sans", cursive;
+            background-image: url('https://images.pexels.com/photos/3309659/pexels-photo-3309659.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+            background-size: cover;
+            background-position: center;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .otp-container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 350px;
+            text-align: center;
+            position: relative;
+            margin-left: 400px;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #444;
+        }
+
+        .otp-boxes {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+
+        .otp-box {
+            width: 50px;
+            height: 50px;
+            font-size: 1.5em;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            outline: none;
+        }
+
+        .otp-box:focus {
+            border-color: #f76c6c;
+        }
+
+        .verify-btn {
+            background-color: #f09595;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .instruction {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .timer {
+            font-size: 0.9em;
+            color: #f76c6c;
+            margin-bottom: 10px;
+        }
+
+        .resend-otp {
+            font-size: 0.9em;
+            color: #f76c6c;
+            text-decoration: none;
+            cursor: pointer;
+            opacity: 0.5;
+            pointer-events: none;
+            position: absolute;
+            bottom: 10px;
+            left: 20px;
+        }
+
+        .resend-otp.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .flashes {
+            list-style-type: none;
+            padding: 10px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            margin: 10px 0;
+            position: absolute;  /* Positioned at the top of the page */
+            width: 100%;
+            top: 0;
+            z-index: 1000;  /* Ensure it is on top of other content */
+            left: 0;
+            text-align: center; /* Center-align text */
+        }
+
+        .flash {
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for message in messages %}
+                    <li class="flash">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <div class="otp-container">
+        <h1>Enter OTP</h1>
+        <div class="instruction">Enter the OTP sent to your email.</div>
+        <div class="otp-boxes">
+            <input type="text" maxlength="1" class="otp-box" oninput="moveFocus(0)" id="otp1">
+            <input type="text" maxlength="1" class="otp-box" oninput="moveFocus(1)" id="otp2" disabled>
+            <input type="text" maxlength="1" class="otp-box" oninput="moveFocus(2)" id="otp3" disabled>
+            <input type="text" maxlength="1" class="otp-box" oninput="moveFocus(3)" id="otp4" disabled>
+            <input type="text" maxlength="1" class="otp-box" oninput="moveFocus(4)" id="otp5" disabled>
+            <input type="text" maxlength="1" class="otp-box" oninput="moveFocus(5)" id="otp6" disabled>
+        </div>
+        <div class="timer" id="timer">OTP valid for 3:00 minutes</div>
+        <form method="POST" action="{{ url_for('get_otp') }}">
+            <input type="hidden" id="otp" name="otp">
+            <button type="submit" class="verify-btn" id="verify-btn">Verify OTP</button>
+        </form>
+        <form method="POST" action="{{ url_for('resend_otp') }}">
+            <button type="submit" class="resend-otp" id="resend-otp" disabled>Resend OTP</button>
+        </form>
+    </div>
+
+    <script>
+        let timerInterval;
+
+        // Timer function
+        function startTimer(duration, display) {
+            let timer = duration, minutes, seconds;
+            timerInterval = setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = "OTP valid for " + minutes + ":" + seconds + " minutes";
+
+                if (--timer < 0) {
+                    clearInterval(timerInterval);
+                    display.textContent = "OTP has expired.";
+                    document.getElementById("verify-btn").disabled = true;
+                    document.getElementById("resend-otp").disabled = false;
+                    document.getElementById("resend-otp").classList.add("active"); // Enable Resend OTP
+                }
+            }, 1000);
+        }
+
+        window.onload = function () {
+            startOTPProcess();
+        };
+
+        function moveFocus(index) {
+            const currentBox = document.getElementById(`otp${index + 1}`);
+            const nextBox = document.getElementById(`otp${index + 2}`);
+            if (currentBox.value !== "" && nextBox) {
+                nextBox.disabled = false;
+                nextBox.focus();
+            }
+            checkOTPComplete();
+        }
+
+        // Enable button when all boxes are filled
+        function checkOTPComplete() {
+            const otpComplete = Array.from(document.querySelectorAll('.otp-box')).every(box => box.value !== "");
+            const verifyButton = document.getElementById("verify-btn");
+            if (otpComplete) {
+                verifyButton.style.opacity = 1;
+                verifyButton.style.pointerEvents = "auto";
+
+                // Manually concatenate the OTP values from each box
+                const otpValue = document.getElementById("otp1").value +
+                                document.getElementById("otp2").value +
+                                document.getElementById("otp3").value +
+                                document.getElementById("otp4").value +
+                                document.getElementById("otp5").value +
+                                document.getElementById("otp6").value;
+                document.getElementById("otp").value = otpValue;
+
+                console.log("Concatenated OTP:", otpValue);  // Debug statement
+            } else {
+                verifyButton.style.opacity = 0.5;
+                verifyButton.style.pointerEvents = "none";
+            }
+        }
+
+
+        function resendOTP() {
+            clearInterval(timerInterval);
+            document.getElementById("resend-otp").disabled = true;
+            document.getElementById("resend-otp").classList.remove("active");
+            startOTPProcess();
+        }
+
+        function startOTPProcess() {
+            const timeLeft = 3 * 60;
+            const display = document.getElementById("timer");
+            startTimer(timeLeft, display);
+            document.getElementById("verify-btn").disabled = false;
+        }
+    </script>
+</body>
+</html>

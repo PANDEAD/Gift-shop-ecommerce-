@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Password - e Gift Shopee</title>
+    <style>
+        body {
+            font-family: "Comic Sans MS", "Comic Sans", cursive;
+            background-image: url('https://images.pexels.com/photos/3309659/pexels-photo-3309659.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+            background-size: cover;
+            background-position: center;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 350px;
+            text-align: center;
+            margin-left: 400px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #444;
+        }
+
+        hr {
+            border: 0;
+            border-top: 2px solid #f76c6c;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .update-btn {
+            background-color: #f09595;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            display: none;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Reset Password</h1>
+        <hr>
+        <form onsubmit="return validatePasswords()" action="{{ url_for('reset_password') }}" method="POST">
+            <input type="password" id="newPassword" name="new_password" class="input-field" placeholder="Enter New Password" required>
+            <input type="password" id="confirmPassword" name="confirm_password" class="input-field" placeholder="Re-enter Password" required>
+            <div id="errorMessage" class="error-message"></div>
+            <button type="submit" class="update-btn">Update</button>
+        </form>
+    </div>
+
+    <script>
+        function validatePasswords() {
+            const newPassword = document.getElementById("newPassword").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+            const errorMessage = document.getElementById("errorMessage");
+
+            if (newPassword !== confirmPassword) {
+                errorMessage.textContent = "Passwords do not match.";
+                errorMessage.style.display = "block";
+                return false; // Prevent form submission
+            }
+
+            errorMessage.style.display = "none";
+            return true; // Allow form submission
+        }
+    </script>
+</body>
+</html>

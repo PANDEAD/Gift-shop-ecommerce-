@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Details</title>
+    <style>
+        /* Styles are unchanged */
+        body {
+            font-family: "Comic Sans MS", "Comic Sans", cursive;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 90%;
+            padding: 40px;
+            background: #ffffff;
+            border-radius: 30px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+            position: relative;
+        }
+
+        .edit-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #ff6666;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .edit-btn:hover {
+            background-color: #ff3333;
+        }
+
+        h2 {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        hr {
+            border: 0;
+            height: 2px;
+            background-color: #ffe6e6;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            font-size: 1em;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .input-group input {
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #ffe6e6;
+            box-shadow: 0px 0px 8px rgba(255, 102, 102, 0.3);
+        }
+
+        .address-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .address-row .input-group {
+            flex: 1;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .save-btn, .back-btn {
+            background-color: #ff6666;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .save-btn:hover, .back-btn:hover {
+            background-color: #ff3333;
+        }
+
+        .back-btn {
+            background-color: #ddd;
+            color: #333;
+        }
+
+        .back-btn:hover {
+            background-color: #bbb;
+        }
+
+        input:disabled {
+            background-color: #f0f0f0;
+            cursor: not-allowed;
+        }
+
+        .save-btn, .button-container {
+            display: none;
+        }
+    </style>
+    <script>
+        function toggleEdit() {
+            const inputs = document.querySelectorAll('input');
+            const isEditable = inputs[0].disabled;
+            inputs.forEach(input => input.disabled = !isEditable);
+            document.querySelector('.save-btn').style.display = isEditable ? 'block' : 'none';
+            document.querySelector('.button-container').style.display = 'flex';
+        }
+        function validateForm() {
+            const name = document.getElementById('name').value.trim();
+            const mobile = document.getElementById('mobile').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const street = document.getElementById('street').value.trim();
+            const city = document.getElementById('city').value.trim();
+            const state = document.getElementById('state').value.trim();
+            const pincode = document.getElementById('pincode').value.trim();
+            const mobileRegex = /^[0-9]{10}$/;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!name || !mobile || !email || !street || !city || !state || !pincode) {
+                alert("All fields are required. Please fill out every field.");
+                return false;
+            }
+
+            if (!mobileRegex.test(mobile)) {
+                alert("Please enter a valid 10-digit mobile number.");
+                return false;
+            }
+
+            if (!emailRegex.test(email)) {
+                alert("Please enter a valid email address.");
+                return false;
+            }
+
+            if (isNaN(pincode) || pincode.length !== 6) {
+                alert("Please enter a valid 6-digit pincode.");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</head>
+<body>
+    <form method="POST" action="{{ url_for('edit_user_details') }}">
+        <div class="container">
+            <button type="button" class="edit-btn" onclick="toggleEdit()">Edit</button>
+            <h2>Personal Details</h2>
+            <hr>
+
+            <div class="input-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" value="{{ user['name'] }}" disabled>
+            </div>
+
+            <div class="input-group">
+                <label for="mobile">Mobile No</label>
+                <input type="tel" id="mobile" name="mobile" value="{{ user['mobile'] }}" disabled>
+            </div>
+
+            <div class="input-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" value="{{ user['email'] }}" disabled>
+            </div>
+
+            <div class="input-group">
+                <label>Primary Address</label>
+            </div>
+
+            <div class="address-row">
+                <div class="input-group">
+                    <label for="street">Street/Colony</label>
+                    <input type="text" id="street" name="street" value="{{ user['address'].split(', ')[0] if user['address'] else '' }}" disabled>
+                </div>
+                <div class="input-group">
+                    <label for="city">City</label>
+                    <input type="text" id="city" name="city" value="{{ user['address'].split(', ')[1] if user['address'] else '' }}" disabled>
+                </div>
+            </div>
+
+            <div class="address-row">
+                <div class="input-group">
+                    <label for="state">State</label>
+                    <input type="text" id="state" name="state" value="{{ user['address'].split(', ')[2] if user['address'] else '' }}" disabled>
+                </div>
+                <div class="input-group">
+                    <label for="pincode">Pincode</label>
+                    <input type="text" id="pincode" name="pincode" value="{{ user['address'].split(', ')[3] if user['address'] else '' }}" disabled>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <button type="submit" class="save-btn" onclick="return validateForm()">Save</button>
+                <button type="button" class="back-btn" onclick="window.location.href='/profile'">Back</button>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
