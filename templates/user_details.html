@@ -3,205 +3,261 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Details</title>
+    <title>Personal Details | Curated</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
     <style>
-        /* Styles are unchanged */
-        body {
-            font-family: "Comic Sans MS", "Comic Sans", cursive;
-            background-color: #f5f5f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
+       
+        :root {
+            --bg-color: #fdfcf8; 
+            --text-main: #2b2b2b;
+            --text-muted: #6e6e6e;
+            --glass-bg: rgba(255, 255, 255, 0.5);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --orb-1: rgba(255, 196, 196, 0.55);
+            --orb-2: rgba(196, 219, 255, 0.55);
+            --orb-3: rgba(235, 196, 255, 0.55);
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+       
+        .aura-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; overflow: hidden; pointer-events: none;
+        }
+        .orb {
+            position: absolute; border-radius: 50%;
+            filter: blur(80px);
+            animation: float 15s infinite ease-in-out alternate;
+        }
+        .orb-1 { width: 60vh; height: 60vh; background: var(--orb-1); top: -10%; left: -10%; }
+        .orb-2 { width: 50vh; height: 50vh; background: var(--orb-2); bottom: -10%; right: -5%; animation-delay: -5s; }
+        .orb-3 { width: 40vh; height: 40vh; background: var(--orb-3); top: 40%; left: 30%; opacity: 0.6; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, -30px) scale(1.1); }
+        }
+
+        
         .container {
-            max-width: 800px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
             width: 90%;
-            padding: 40px;
-            background: #ffffff;
-            border-radius: 30px;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+            max-width: 900px; 
+            padding: 60px;    
             position: relative;
         }
 
-        .edit-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background-color: #ff6666;
-            color: #fff;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 1em;
-        }
-
-        .edit-btn:hover {
-            background-color: #ff3333;
+        
+        .header-row {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            margin-bottom: 40px; 
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            padding-bottom: 20px;
         }
 
         h2 {
-            font-size: 2em;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 10px;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2em; margin: 0;
+            color: var(--text-main); font-weight: 500;
         }
 
-        hr {
-            border: 0;
-            height: 2px;
-            background-color: #ffe6e6;
-            margin-bottom: 20px;
+        .edit-btn {
+            background: transparent; border: 1px solid var(--text-main);
+            color: var(--text-main); padding: 10px 24px;
+            border-radius: 30px; cursor: pointer;
+            font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;
+            transition: 0.3s; font-weight: 600;
+        }
+        .edit-btn:hover {
+            background: var(--text-main); color: white;
         }
 
+        
         .input-group {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 15px;
+            display: flex; flex-direction: column; margin-bottom: 20px;
         }
 
         .input-group label {
-            font-size: 1em;
-            color: #333;
-            margin-bottom: 5px;
+            font-size: 0.9rem; color: var(--text-muted); margin-bottom: 8px;
+            font-weight: 500;
         }
 
         .input-group input {
-            padding: 10px;
-            font-size: 1em;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 14px 18px;
+            font-size: 1.05rem; font-family: 'Inter', sans-serif;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.4);
+            color: var(--text-main);
+            transition: 0.3s;
+            width: 100%; 
+        }
+
+        .input-group input:disabled {
+            background: transparent; border-color: transparent;
+            color: var(--text-main); cursor: default; padding-left: 0;
+            font-weight: 600; opacity: 1; 
         }
 
         .input-group input:focus {
-            outline: none;
-            border-color: #ffe6e6;
-            box-shadow: 0px 0px 8px rgba(255, 102, 102, 0.3);
+            outline: none; background: rgba(255, 255, 255, 0.9);
+            border-color: var(--text-main);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
 
+        
         .address-row {
-            display: flex;
-            gap: 15px;
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 40px; 
         }
 
-        .address-row .input-group {
-            flex: 1;
+        .section-title {
+            margin-top: 40px; margin-bottom: 20px;
+            font-size: 1.2rem; font-weight: 600; color: var(--text-main);
+            border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 10px;
         }
 
+        
         .button-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
+            display: none; 
+            justify-content: flex-end; gap: 15px;
+            margin-top: 40px;
         }
 
-        .save-btn, .back-btn {
-            background-color: #ff6666;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 1em;
+        .save-btn {
+            background-color: var(--text-main); color: white;
+            border: 1px solid var(--text-main);
+            padding: 12px 30px; border-radius: 10px;
+            font-size: 0.9rem; cursor: pointer; transition: 0.3s;
         }
-
-        .save-btn:hover, .back-btn:hover {
-            background-color: #ff3333;
+        .save-btn:hover {
+            background-color: transparent; color: var(--text-main);
         }
 
         .back-btn {
-            background-color: #ddd;
-            color: #333;
+            background: transparent; color: var(--text-muted);
+            border: 1px solid transparent;
+            padding: 12px 30px; border-radius: 10px;
+            font-size: 0.9rem; cursor: pointer; transition: 0.3s;
+            text-decoration: none; display: flex; align-items: center;
         }
-
         .back-btn:hover {
-            background-color: #bbb;
+            color: var(--text-main); background: rgba(0,0,0,0.05);
         }
 
-        input:disabled {
-            background-color: #f0f0f0;
-            cursor: not-allowed;
+     
+        .nav-back {
+            display: block; text-align: center; margin-top: 40px;
+            text-decoration: none; color: var(--text-muted);
+            font-size: 0.85rem; letter-spacing: 1px;
         }
+        .nav-back:hover { color: var(--text-main); }
 
-        .save-btn, .button-container {
-            display: none;
+        
+        @media (max-width: 768px) {
+            .address-row { grid-template-columns: 1fr; gap: 20px; } 
+            .container { padding: 30px 20px; width: 95%; }
+            .header-row { flex-direction: column; gap: 15px; align-items: flex-start; }
         }
     </style>
+    
     <script>
         function toggleEdit() {
             const inputs = document.querySelectorAll('input');
             const isEditable = inputs[0].disabled;
+            
             inputs.forEach(input => input.disabled = !isEditable);
-            document.querySelector('.save-btn').style.display = isEditable ? 'block' : 'none';
-            document.querySelector('.button-container').style.display = 'flex';
+            
+            
+            const btnContainer = document.querySelector('.button-container');
+            btnContainer.style.display = isEditable ? 'flex' : 'none';
+            
+            
+            const editBtn = document.querySelector('.edit-btn');
+            editBtn.style.display = isEditable ? 'none' : 'block';
         }
+
         function validateForm() {
-            const name = document.getElementById('name').value.trim();
-            const mobile = document.getElementById('mobile').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const street = document.getElementById('street').value.trim();
-            const city = document.getElementById('city').value.trim();
-            const state = document.getElementById('state').value.trim();
-            const pincode = document.getElementById('pincode').value.trim();
-            const mobileRegex = /^[0-9]{10}$/;
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const requiredFields = ['name', 'mobile', 'email', 'street', 'city', 'state', 'pincode'];
+            let isValid = true;
 
-            if (!name || !mobile || !email || !street || !city || !state || !pincode) {
-                alert("All fields are required. Please fill out every field.");
+            requiredFields.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el.value.trim()) {
+                    isValid = false;
+                    el.style.borderColor = '#ff6b6b';
+                } else {
+                    el.style.borderColor = 'rgba(0,0,0,0.1)';
+                }
+            });
+
+            if (!isValid) {
+                alert("Please fill in all fields.");
                 return false;
             }
-
-            if (!mobileRegex.test(mobile)) {
-                alert("Please enter a valid 10-digit mobile number.");
-                return false;
-            }
-
-            if (!emailRegex.test(email)) {
-                alert("Please enter a valid email address.");
-                return false;
-            }
-
-            if (isNaN(pincode) || pincode.length !== 6) {
-                alert("Please enter a valid 6-digit pincode.");
-                return false;
-            }
-
             return true;
         }
     </script>
 </head>
 <body>
+
+    <div class="aura-container">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
     <form method="POST" action="{{ url_for('edit_user_details') }}">
         <div class="container">
-            <button type="button" class="edit-btn" onclick="toggleEdit()">Edit</button>
-            <h2>Personal Details</h2>
-            <hr>
+            
+            <div class="header-row">
+                <h2>Personal Details</h2>
+                <button type="button" class="edit-btn" onclick="toggleEdit()">Edit Details</button>
+            </div>
 
             <div class="input-group">
-                <label for="name">Name</label>
+                <label for="name">Full Name</label>
                 <input type="text" id="name" name="name" value="{{ user['name'] }}" disabled>
-            </div>
-
-            <div class="input-group">
-                <label for="mobile">Mobile No</label>
-                <input type="tel" id="mobile" name="mobile" value="{{ user['mobile'] }}" disabled>
-            </div>
-
-            <div class="input-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" value="{{ user['email'] }}" disabled>
-            </div>
-
-            <div class="input-group">
-                <label>Primary Address</label>
             </div>
 
             <div class="address-row">
                 <div class="input-group">
-                    <label for="street">Street/Colony</label>
+                    <label for="mobile">Mobile Number</label>
+                    <input type="tel" id="mobile" name="mobile" value="{{ user['mobile'] }}" disabled>
+                </div>
+                <div class="input-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" value="{{ user['email'] }}" disabled>
+                </div>
+            </div>
+
+            <div class="section-title">Address</div>
+
+            <div class="address-row">
+                <div class="input-group">
+                    <label for="street">Street / Colony</label>
                     <input type="text" id="street" name="street" value="{{ user['address'].split(', ')[0] if user['address'] else '' }}" disabled>
                 </div>
                 <div class="input-group">
@@ -222,10 +278,13 @@
             </div>
 
             <div class="button-container">
-                <button type="submit" class="save-btn" onclick="return validateForm()">Save</button>
-                <button type="button" class="back-btn" onclick="window.location.href='/profile'">Back</button>
+                <a href="{{ url_for('profile') }}" class="back-btn">Cancel</a>
+                <button type="submit" class="save-btn" onclick="return validateForm()">Save Changes</button>
             </div>
+
+            <a href="{{ url_for('profile') }}" class="nav-back">← Back to Dashboard</a>
         </div>
     </form>
+
 </body>
 </html>

@@ -4,95 +4,169 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - e gift shopee</title>
+    <title>Sign Up | Curated</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
     <style>
+        
+        :root {
+            --bg-color: #fdfcf8; 
+            --text-main: #2b2b2b;
+            --text-muted: #6e6e6e;
+            --glass-bg: rgba(255, 255, 255, 0.55);
+            --glass-border: rgba(255, 255, 255, 0.8);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: "Comic Sans MS", "Comic Sans", cursive;
-            background-image: url('https://images.pexels.com/photos/3309659/pexels-photo-3309659.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        
+        .split-container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+      
+        .image-section {
+            flex: 1;
+            background-image: url('https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=1974&auto=format&fit=crop'); /* Matches login page */
             background-size: cover;
             background-position: center;
-            color: #333;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .image-section::before {
+            content: '';
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.3); 
+        }
+
+        .slogan-container {
+            position: relative; z-index: 2;
+            text-align: center;
+            color: white;
+        }
+
+        .slogan-container h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem; margin-bottom: 15px;
+        }
+        .slogan-container p {
+            font-size: 1.2rem; opacity: 0.9; max-width: 400px; line-height: 1.6;
+        }
+
+       
+        .form-section {
+            flex: 1;
+            position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
+            background-color: #fffaf6;
+            overflow: hidden;
         }
 
-        .signup-container {
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            width: 400px;
-            text-align: center;
-            margin-left: 400px
+        
+        .blob {
+            position: absolute;
+            filter: blur(50px);
+            opacity: 0.8;
+            animation: morph 15s ease-in-out infinite alternate;
+            z-index: 0;
+        }
+        .blob-1 { top: 10%; left: 10%; width: 300px; height: 300px; background: linear-gradient(180deg, #ffc2d1 0%, #ffddd1 100%); animation-duration: 20s; border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+        .blob-2 { bottom: 10%; right: 10%; width: 350px; height: 350px; background: linear-gradient(180deg, #c2e2ff 0%, #dcc2ff 100%); animation-duration: 25s; animation-delay: -5s; border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+        .blob-3 { top: 40%; right: 20%; width: 200px; height: 200px; background: linear-gradient(180deg, #fff2c2 0%, #ffc2c2 100%); animation-duration: 18s; animation-delay: -2s; border-radius: 40% 60% 60% 40% / 60% 30% 70% 40%; }
+
+        @keyframes morph {
+            0% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; transform: rotate(0deg); }
+            100% { border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%; transform: rotate(360deg); }
         }
 
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            color: #444;
+        
+        .form-wrapper {
+            width: 80%; max-width: 450px;
+            text-align: center; position: relative; z-index: 2;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
         }
 
+        .website-name {
+            font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase;
+            color: var(--text-muted); margin-bottom: 10px; font-weight: 600;
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2em; margin-bottom: 25px;
+            color: var(--text-main); font-weight: 500;
+        }
+
+        
         .input-field {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #ddd;
+            width: 100%; padding: 14px 20px; margin: 8px 0;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(0,0,0,0.1); border-radius: 12px;
+            font-family: 'Inter', sans-serif; font-size: 0.95rem;
+            color: var(--text-main); transition: 0.3s;
+        }
+        .input-field:focus {
+            outline: none; background: rgba(255, 255, 255, 0.9);
+            border-color: var(--text-main); box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
 
         .signup-btn {
-            background-color: #f09595;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-size: 1em;
-            cursor: pointer;
-            width: 100%;
+            background-color: #2b2b2b; color: white; border: 1px solid #2b2b2b;
+            padding: 14px; border-radius: 12px;
+            font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px;
+            cursor: pointer; width: 100%; margin-top: 20px; margin-bottom: 20px;
+            transition: 0.3s; font-weight: 600;
         }
-
-        .welcome-section {
-            background-color: #f09595;
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .welcome-section h2 {
-            margin: 0;
-            font-size: 1.8em;
-        }
-
-        .welcome-section p {
-            font-size: 0.9em;
-            margin: 10px 0;
-        }
-
-        .sign-in-link {
-            color: #f76c6c;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .sign-in-link:hover {
-            text-decoration: underline;
+        .signup-btn:hover {
+            background-color: transparent; color: #2b2b2b;
+            transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
         .existing-account {
-            margin-top: 15px;
-            font-size: 0.9em;
+            font-size: 0.9em; color: var(--text-muted); margin-top: 10px;
         }
+        .sign-in-link {
+            color: var(--text-main); text-decoration: none; font-weight: 600;
+            border-bottom: 1px solid transparent; transition: 0.3s;
+        }
+        .sign-in-link:hover { border-bottom: 1px solid var(--text-main); }
 
         .error-message {
-            color: red;
-            font-size: 0.85em;
-            display: none;
-            margin: -5px 0 10px;
+            color: #d64545; font-size: 0.85em; display: none;
+            margin: -5px 0 10px; text-align: left; padding-left: 5px;
+        }
+
+        
+        @media (max-width: 900px) {
+            .image-section { display: none; }
+            .form-section { flex: 100%; }
         }
     </style>
     <script>
@@ -132,25 +206,48 @@
     </script>
 </head>
 <body>
-    <div class="signup-container">
-        <div class="welcome-section">
-            <h2>Welcome Back!</h2>
-            <p>To keep connected, please sign up with your personal info.</p>
+
+    <div class="split-container">
+        <div class="image-section">
+            <div class="slogan-container">
+                <h1>Welcome!</h1>
+                <p>Join our curated community to discover gifts perfect for every occasion</p>
+            </div>
         </div>
-        <h1>Create Account</h1>
-        <form action="/signup" method="POST" onsubmit="return validateSignUpForm()">
-            <input type="text" class="input-field" id="name" name="name" placeholder="Name" required>
-            <input type="email" class="input-field" id="email" name="email" placeholder="Email" required>
-            <div id="email-error" class="error-message">Please enter a valid email address.</div>
-            <input type="password" class="input-field" id="password" name="password" placeholder="Password" required>
-            <input type="password" class="input-field" id="confirm-password" name="confirm-password" placeholder="Re-enter Password" required>
-            <div id="password-match-error" class="error-message">Passwords do not match.</div>
-            <div id="empty-field-error" class="error-message">All fields are required.</div>
-            <button type="submit" class="signup-btn">Sign Up</button>
-        </form>
-        <div class="existing-account">
-            Already have an account? <a href="{{ url_for('login') }}" class="sign-in-link">Sign in</a>
+
+        <div class="form-section">
+            
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+            <div class="blob blob-3"></div>
+
+            <div class="form-wrapper">
+                <div class="website-name">E Gift Shopee</div>
+                <h2>Create Account</h2>
+
+                <form action="/signup" method="POST" onsubmit="return validateSignUpForm()">
+                    
+                    <input type="text" class="input-field" id="name" name="name" placeholder="Full Name" required>
+                    
+                    <input type="email" class="input-field" id="email" name="email" placeholder="Email Address" required>
+                    <div id="email-error" class="error-message">Please enter a valid email address.</div>
+                    
+                    <input type="password" class="input-field" id="password" name="password" placeholder="Password" required>
+                    
+                    <input type="password" class="input-field" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required>
+                    <div id="password-match-error" class="error-message">Passwords do not match.</div>
+                    
+                    <div id="empty-field-error" class="error-message">All fields are required.</div>
+                    
+                    <button type="submit" class="signup-btn">Sign Up</button>
+                </form>
+
+                <div class="existing-account">
+                    Already have an account? <a href="{{ url_for('login') }}" class="sign-in-link">Sign in</a>
+                </div>
+            </div>
         </div>
     </div>
+
 </body>
 </html>

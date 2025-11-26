@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders | Curated</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        
+        :root {
+            --bg-color: #fdfcf8; 
+            --text-main: #2b2b2b;
+            --text-muted: #6e6e6e;
+            --glass-bg: rgba(255, 255, 255, 0.5);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --orb-1: rgba(255, 196, 196, 0.55);
+            --orb-2: rgba(196, 219, 255, 0.55);
+            --orb-3: rgba(235, 196, 255, 0.55);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        h1, h2 { font-family: 'Playfair Display', serif; }
+
+        
+        .aura-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; overflow: hidden; pointer-events: none;
+        }
+        .orb {
+            position: absolute; border-radius: 50%;
+            filter: blur(80px);
+            animation: float 15s infinite ease-in-out alternate;
+        }
+        .orb-1 { width: 60vh; height: 60vh; background: var(--orb-1); top: -10%; left: -10%; }
+        .orb-2 { width: 50vh; height: 50vh; background: var(--orb-2); bottom: -10%; right: -5%; animation-delay: -5s; }
+        .orb-3 { width: 40vh; height: 40vh; background: var(--orb-3); top: 40%; left: 30%; opacity: 0.6; }
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, -30px) scale(1.1); }
+        }
+
+    
+        .container {
+            max-width: 1000px;
+            margin: 80px auto;
+            padding: 20px;
+        }
+
+        .page-title {
+            font-size: 2.5rem; text-align: center; margin-bottom: 40px;
+            color: var(--text-main);
+        }
+
+     
+        .order-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        }
+        .order-card:hover { transform: translateY(-3px); background: rgba(255,255,255,0.7); }
+
+        .order-info { display: flex; align-items: center; gap: 20px; }
+        
+        .order-img {
+            width: 80px; height: 80px; 
+            border-radius: 8px; object-fit: cover;
+            background: #eee;
+        }
+
+        .order-details h3 { font-size: 1.2rem; margin-bottom: 5px; }
+        .order-details p { color: var(--text-muted); font-size: 0.9rem; }
+
+        .order-status { text-align: right; }
+        
+      
+        .status-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        
+        .status-ordered {
+            background: rgba(255, 230, 0, 0.2); color: #9c8c02; border: 1px solid rgba(255, 230, 0, 0.3);
+        }
+        .status-delivered {
+            background: rgba(0, 255, 100, 0.1); color: #008a3e; border: 1px solid rgba(0, 255, 100, 0.2);
+        }
+
+        .back-link {
+            display: block; text-align: center; margin-top: 40px;
+            color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem;
+        }
+        
+        
+        .flashes {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            z-index: 2000; list-style: none; width: 90%; max-width: 400px;
+        }
+        .flash {
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+            padding: 15px; border-radius: 8px; margin-bottom: 10px;
+            text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid var(--glass-border);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="aura-container">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for message in messages %}
+                    <li class="flash">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <div class="container">
+        <h1 class="page-title">My Orders</h1>
+
+        {% for order in orders %}
+        <div class="order-card">
+            <div class="order-info">
+                <img src="{{ url_for('static', filename=order['image_url'].replace('static/', '')) }}" class="order-img" alt="Product">
+                <div class="order-details">
+                    <h3>{{ order['name'] }}</h3>
+                    <p>Price: ₹{{ order['price'] }}</p>
+                </div>
+            </div>
+            <div class="order-status">
+                <span class="status-badge status-{{ order['status']|lower }}">{{ order['status'] }}</span>
+            </div>
+        </div>
+        {% else %}
+        <div style="text-align: center; color: var(--text-muted);">
+            <p>You haven't ordered anything yet.</p>
+        </div>
+        {% endfor %}
+
+        <a href="{{ url_for('main') }}" class="back-link">← Back to Shopping</a>
+    </div>
+
+</body>
+</html>

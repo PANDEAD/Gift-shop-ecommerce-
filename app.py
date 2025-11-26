@@ -175,10 +175,12 @@ def add_to_cart(product_id):
     user_id = session['user_id']
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
+    # Check if product exists
     cursor.execute("SELECT * FROM products WHERE id = %s", (product_id,))
     product = cursor.fetchone()
 
     if product:
+        # Check if item is already in cart
         cursor.execute("SELECT * FROM cart WHERE user_id = %s AND product_id = %s",
                        (user_id, product_id))
         existing_item = cursor.fetchone()
@@ -192,10 +194,13 @@ def add_to_cart(product_id):
                            (user_id, product_id, 1))
 
         mysql.connection.commit()
+        flash("Item added to cart successfully!")  # Notification
     else:
         flash("Product not found.")
 
-    return redirect(url_for('main'))
+    cursor.close()
+    
+    return redirect(request.referrer or url_for('main'))
 
 @app.route('/cart')
 def view_cart():
@@ -576,6 +581,64 @@ def filter():
 
     return render_template('filter.html', category=category,
                            products=category_products, categories=categories)
+
+@app.route('/checkout', methods=['POST'])
+def checkout():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    user_id = session['user_id']
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    
+    # 1. Get items from Cart joined with Product price
+    cursor.execute("""
+        SELECT cart.product_id, cart.quantity, products.price 
+        FROM cart 
+        JOIN products ON cart.product_id = products.id 
+        WHERE cart.user_id = %s
+    """, (user_id,))
+    cart_items = cursor.fetchall()
+
+    if not cart_items:
+        flash("Your cart is empty.")
+        return redirect(url_for('view_cart'))
+
+    
+    for item in cart_items:
+        cursor.execute("""
+            INSERT INTO orders (user_id, product_id, quantity, price, status, order_date) 
+            VALUES (%s, %s, %s, %s, 'Ordered', NOW())
+        """, (user_id, item['product_id'], item['quantity'], item['price']))
+    
+    
+    cursor.execute("DELETE FROM cart WHERE user_id = %s", (user_id,))
+    mysql.connection.commit()
+    cursor.close()
+
+    flash("Items ordered successfully!")
+    return redirect(url_for('orders'))
+
+@app.route('/orders')
+def orders():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    user_id = session['user_id']
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    
+    # Fetch orders with product details
+    cursor.execute("""
+        SELECT orders.id, orders.status, orders.price, orders.quantity, orders.order_date, 
+               products.name, products.image_url 
+        FROM orders 
+        JOIN products ON orders.product_id = products.id 
+        WHERE orders.user_id = %s 
+        ORDER BY orders.order_date DESC
+    """, (user_id,))
+    my_orders = cursor.fetchall()
+    cursor.close()
+
+    return render_template('orders.html', orders=my_orders)
 
 @app.route('/admin_logout')
 def admin_logout():

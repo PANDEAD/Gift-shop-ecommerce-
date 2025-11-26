@@ -4,73 +4,147 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reset Password - e Gift Shopee</title>
+    <title>Reset Password | Curated</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
     <style>
-        body {
-            font-family: "Comic Sans MS", "Comic Sans", cursive;
-            background-image: url('https://images.pexels.com/photos/3309659/pexels-photo-3309659.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
-            background-size: cover;
-            background-position: center;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
+        
+        :root {
+            --bg-color: #fdfcf8; 
+            --text-main: #2b2b2b;
+            --text-muted: #6e6e6e;
+            --glass-bg: rgba(255, 255, 255, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            
+            
+            --orb-1: rgba(255, 196, 196, 0.55);
+            --orb-2: rgba(196, 219, 255, 0.55);
+            --orb-3: rgba(235, 196, 255, 0.55);
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        
+        .aura-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; overflow: hidden; pointer-events: none;
+        }
+        .orb {
+            position: absolute; border-radius: 50%;
+            filter: blur(80px);
+            animation: float 15s infinite ease-in-out alternate;
+        }
+        .orb-1 { width: 60vh; height: 60vh; background: var(--orb-1); top: -10%; left: -10%; }
+        .orb-2 { width: 50vh; height: 50vh; background: var(--orb-2); bottom: -10%; right: -5%; animation-delay: -5s; }
+        .orb-3 { width: 40vh; height: 40vh; background: var(--orb-3); top: 40%; left: 30%; opacity: 0.6; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, -30px) scale(1.1); }
+        }
+
+        
         .container {
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            width: 350px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: 50px 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 400px;
             text-align: center;
-            margin-left: 400px;
+            position: relative;
         }
 
         h1 {
-            font-size: 2.5em;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2em;
             margin-bottom: 10px;
-            color: #444;
+            color: var(--text-main);
+            font-weight: 500;
         }
 
         hr {
             border: 0;
-            border-top: 2px solid #f76c6c;
-            width: 100%;
-            margin-bottom: 20px;
+            border-top: 1px solid var(--text-main);
+            width: 40px;
+            margin: 0 auto 30px;
+            opacity: 0.2;
         }
 
+        
         .input-field {
             width: 100%;
-            padding: 10px;
+            padding: 14px 15px;
             margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #ddd;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            transition: 0.3s;
+        }
+        .input-field:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.9);
+            border-color: var(--text-main);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
 
         .update-btn {
-            background-color: #f09595;
+            background-color: var(--text-main);
             color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-size: 1em;
+            border: 1px solid var(--text-main);
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
             cursor: pointer;
             width: 100%;
-            margin-top: 20px;
+            margin-top: 25px;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+
+        .update-btn:hover {
+            background-color: transparent;
+            color: var(--text-main);
         }
 
         .error-message {
-            color: red;
-            font-size: 0.9em;
+            color: #d64545;
+            font-size: 0.85em;
             display: none;
             margin-top: 10px;
+            text-align: left;
+            padding-left: 5px;
         }
     </style>
 </head>
 <body>
+
+    <div class="aura-container">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
     <div class="container">
         <h1>Reset Password</h1>
         <hr>
@@ -91,11 +165,11 @@
             if (newPassword !== confirmPassword) {
                 errorMessage.textContent = "Passwords do not match.";
                 errorMessage.style.display = "block";
-                return false; // Prevent form submission
+                return false; 
             }
 
             errorMessage.style.display = "none";
-            return true; // Allow form submission
+            return true; 
         }
     </script>
 </body>

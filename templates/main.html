@@ -3,192 +3,315 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gift Shop - Home</title>
+    <title>Gift Shop | Curated</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
     <style>
-        /* General Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Comic Sans MS', cursive, sans-serif;
-        }
-        body {
-            background-color: #ffdddd;
-            color: #333;
+        
+        :root {
+            --bg-color: #fdfcf8; 
+            --text-main: #2b2b2b;
+            --text-muted: #6e6e6e;
+            --glass-border: rgba(255, 255, 255, 0.6);
+            
+            
+            --orb-1: rgba(255, 196, 196, 0.55); 
+            --orb-2: rgba(196, 219, 255, 0.55); 
+            --orb-3: rgba(235, 196, 255, 0.55); 
         }
 
-        /* Header */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 500;
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        button { cursor: pointer; border: none; outline: none; }
+        
+        
+        .aura-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; overflow: hidden; pointer-events: none;
+        }
+        .orb {
+            position: absolute; border-radius: 50%;
+            filter: blur(80px);
+            animation: float 15s infinite ease-in-out alternate;
+        }
+        .orb-1 { width: 60vh; height: 60vh; background: var(--orb-1); top: -10%; left: -10%; }
+        .orb-2 { width: 50vh; height: 50vh; background: var(--orb-2); bottom: -10%; right: -5%; animation-delay: -5s; }
+        .orb-3 { width: 40vh; height: 40vh; background: var(--orb-3); top: 40%; left: 30%; opacity: 0.6; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, -30px) scale(1.1); }
+        }
+
+        
         .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: #ffdde1;
-            padding: 10px 20px;
-            color: #333;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 20px 40px;
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            transition: all 0.4s ease;
+            background: transparent;
         }
+
+        .header.scrolled {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 15px 40px;
+        }
+
         .header .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #ff6f61;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem; font-weight: 600; color: var(--text-main);
         }
+
         .header form {
-            display: flex;
-            flex: 1;
-            max-width: 600px;
+            display: flex; align-items: center;
+            border-bottom: 1px solid var(--text-main);
+            padding-bottom: 5px; margin: 0 40px;
         }
         .header input[type="text"] {
-            flex: 1;
-            padding: 8px;
-            border-radius: 4px;
-            border: 1px solid #ffc2c2;
-            color: #333;
-            font-size: 1rem;
+            background: transparent; border: none;
+            color: inherit; font-family: 'Inter', sans-serif;
+            font-size: 1rem; width: 250px; padding: 5px;
         }
+        .header input:focus { outline: none; }
         .header button {
-            background-color: #ff6f61;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 5px;
-            border: none;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin-left: 10px;
-        }
-        .header button:hover {
-            background-color: #ff8367;
+            background: transparent; color: inherit;
+            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;
+            font-weight: 600; margin-left: 10px;
         }
 
-        /* Filters Button and Dropdown */
-        .filters-button {
-            background-color: #ff6f61;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            transition: background 0.3s;
-            font-size: 0.9rem;
-            margin-left: 15px;
+        .icons { display: flex; align-items: center; gap: 25px; }
+        
+        .header-button, .filters-button, .icon {
+            background: transparent; font-size: 0.85rem;
+            font-family: 'Inter', sans-serif; color: var(--text-main);
+            padding: 0; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;
+        }
+        .header-button:hover, .filters-button:hover { opacity: 0.7; }
+
+        
+        .filters-dropdown, .user-dropdown-menu {
+            display: none; position: absolute; top: 150%; right: 0;
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+            min-width: 180px; box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid var(--glass-border); border-radius: 12px;
+            padding: 10px 0; z-index: 1001;
+        }
+        .filters-dropdown a, .user-dropdown-menu a {
+            display: block; padding: 12px 20px;
+            font-size: 0.85rem; color: var(--text-muted);
+        }
+        .filters-dropdown a:hover, .user-dropdown-menu a:hover {
+            background: rgba(0,0,0,0.03); color: var(--text-main);
+        }
+
+        
+        .hero {
+            height: 100vh;
+            display: flex; 
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center; 
+            text-align: center; 
+            padding: 0 20px;
             position: relative;
-        }
-        .filters-button:hover {
-            background-color: #ff8367;
-        }
-        .filters-dropdown {
-            display: none;
-            position: absolute;
-            background-color: #fff;
-            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-            min-width: 160px;
-            z-index: 1;
-            margin-top: 10px;
-        }
-        .filters-dropdown a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
-        .filters-dropdown a:hover {
-            background-color: #ddd;
+            overflow: hidden;
         }
 
-        /* Dropdown for User Profile */
-        .user-dropdown {
-            position: relative;
-            display: inline-block;
-        }
-        .user-dropdown-menu {
-            display: none;
-            position: absolute;
-            background-color: #fff;
-            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-            min-width: 160px;
-            z-index: 1;
-        }
-        .user-dropdown-menu a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
-        .user-dropdown-menu a:hover {
-            background-color: #ddd;
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+            transition: transform 0.1s linear;
+            will-change: transform, opacity;
         }
 
-        /* Header Image Section */
-        .header-image {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .header-image img {
-            width: 100%;
-            max-height: 500px;
-            object-fit: cover;
+        .hero h1 {
+            font-size: clamp(3rem, 7vw, 6rem);
+            line-height: 1.1; max-width: 1000px; margin-bottom: 25px;
+            color: #1a1a1a;
         }
 
-        /* Gift Grid */
+        .hero p {
+            font-size: 1.2rem; 
+            color: var(--text-muted);
+            max-width: 600px; 
+            letter-spacing: 0.5px;
+            margin: 0 auto;
+        }
+
+        .scroll-indicator {
+            position: absolute; bottom: 40px;
+            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px;
+            opacity: 0.6; animation: bounce 2s infinite;
+        }
+        @keyframes bounce { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-8px);} }
+
+      
+        .random-products {
+            padding: 40px;
+            margin-top: -50px;
+            position: relative; z-index: 2;
+        }
+
+        .random-products h2 {
+            font-size: 2.5rem; margin-bottom: 30px;
+            border-bottom: 1px solid rgba(0,0,0,0.08); padding-bottom: 20px;
+            display: flex; justify-content: space-between; align-items: baseline;
+        }
+        .random-products h2::after {
+            content: "SCROLL TO EXPLORE →"; font-size: 0.7rem; font-family: 'Inter'; 
+            letter-spacing: 2px; opacity: 0.5;
+        }
+
+    
         .gift-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 20px;
-            padding: 20px;
+            display: flex;
+            gap: 30px; 
+            overflow-x: auto; 
+           
+            padding: 40px 10px;
+            scroll-behavior: smooth;
         }
+        .gift-grid::-webkit-scrollbar { display: none; }
+
         .gift-item {
-            background-color: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            transition: transform 0.2s;
+            flex: 0 0 300px;
+        
+            background: rgba(255, 255, 255, 0.4); 
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 0;
+            overflow: hidden; text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.03);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+
         .gift-item:hover {
-            transform: scale(1.05);
+            transform: translateY(-12px) scale(1.02);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            border-color: white;
         }
+
         .gift-item img {
-            width: 100%;
-            height: auto;
-            border-radius: 5px;
-            margin-bottom: 10px;
+            width: 100%; height: 380px; 
+            object-fit: cover; 
+            transition: transform 0.6s ease;
         }
+        .gift-item:hover img { transform: scale(1.05); }
+
         .gift-item h4 {
-            margin: 10px 0;
-            font-size: 1rem;
-            color: #333;
+            margin: 15px 0 5px; font-size: 1.1rem;
+            color: var(--text-main);
         }
         .gift-item .price {
-            color: #ff6f61;
-            font-weight: bold;
-            margin: 10px 0;
+            color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;
+            font-family: 'Inter'; font-weight: 500;
         }
 
-        /* Footer Styles */
+        .gift-item button {
+            background: transparent; border: 1px solid var(--text-main);
+            color: var(--text-main); padding: 10px 25px; margin-bottom: 25px;
+            font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px;
+            transition: 0.3s;
+        }
+        .gift-item button:hover {
+            background: var(--text-main); color: white;
+        }
+
+        
+        .category-split {
+            display: flex;
+            height: 600px;
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .cat-card {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: flex 0.5s ease;
+        }
+        
+        .cat-card:hover { flex: 1.5; }
+
+        .cat-card img {
+            position: absolute; width: 100%; height: 100%;
+            object-fit: cover; transition: transform 0.8s ease;
+        }
+        .cat-card:hover img { transform: scale(1.1); }
+
+        .cat-overlay {
+            position: absolute; z-index: 2;
+            background: rgba(0,0,0,0.2);
+            width: 100%; height: 100%;
+            transition: background 0.3s;
+        }
+        .cat-card:hover .cat-overlay { background: rgba(0,0,0,0.1); }
+
+        .cat-text {
+            position: relative; z-index: 3;
+            color: white; text-align: center;
+            border: 1px solid rgba(255,255,255,0.5);
+            padding: 20px 40px;
+            backdrop-filter: blur(5px);
+        }
+        .cat-text h3 { font-size: 2rem; margin-bottom: 5px; }
+        .cat-text span { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; }
+
+    
         .footer {
-            text-align: center;
-            padding: 20px;
-            background-color: #ffdde1;
-            color: #333;
-            width: 100%;
+            padding: 60px; text-align: center;
+            background: white; color: var(--text-muted);
+            font-family: 'Inter'; font-size: 0.9rem;
+            border-top: 1px solid rgba(0,0,0,0.05);
         }
 
-        /* Flash Message Style */
+        
         .flashes {
-            list-style-type: none;
-            padding: 10px;
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
-            margin: 10px 0;
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            z-index: 2000; list-style: none; width: 90%; max-width: 400px;
         }
         .flash {
-            padding: 5px;
+            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px);
+            padding: 15px; border-radius: 8px; margin-bottom: 10px;
+            text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
     </style>
 </head>
 <body>
 
-    <!-- Flash Messages Section -->
+    <div class="aura-container">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             <ul class="flashes">
@@ -199,53 +322,59 @@
         {% endif %}
     {% endwith %}
 
-    <!-- Header -->
-    <div class="header">
+    <header class="header" id="main-header">
         <div class="logo">GiftShop</div>
+        
         <form action="{{ url_for('search') }}" method="GET">
-            <input type="text" name="query" placeholder="Search best gift for ur best ones" required>
+            <input type="text" name="query" placeholder="Search curated gifts..." required>
             <button type="submit">Search</button>
         </form>
-        <div class="dropdown">
-            <button class="filters-button" onclick="toggleFiltersDropdown()">Filters</button>
-            <div id="filters-dropdown" class="filters-dropdown">
-                {% for category in categories %}
-                    <a href="{{ url_for('filter', category=category) }}">{{ category }}</a>
-                {% endfor %}
-            </div>
-        </div>
+
         <div class="icons">
+            <div class="dropdown" style="position: relative;">
+                <button class="filters-button" onclick="toggleFiltersDropdown()">Collections ▾</button>
+                <div id="filters-dropdown" class="filters-dropdown">
+                    {% for category in categories %}
+                        <a href="{{ url_for('filter', category=category) }}">{{ category }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+
             {% if 'user_id' in session %}
-                <form action="{{ url_for('view_cart') }}" method="GET" style="display: inline;">
-                    <button class="header-button">🛒 Cart ({{ cart_count }})</button>
+                <form action="{{ url_for('view_cart') }}" method="GET">
+                    <button class="header-button">Cart</button>
                 </form>
             {% else %}
-                <form action="{{ url_for('login') }}" method="GET" style="display: inline;">
-                    <button class="header-button">🛒 Cart</button>
+                <form action="{{ url_for('login') }}" method="GET">
+                    <button class="header-button">Cart</button>
                 </form>
             {% endif %}
-            <form action="#" method="GET" style="display: inline;">
-                <button class="header-button">📦 Ordered Items</button>
+
+            <form action="#" method="GET">
+                <button class="header-button">Orders</button>
             </form>
-            <div class="user-dropdown">
-                <button class="icon" onclick="toggleUserDropdown()">👤</button>
+
+            <div class="user-dropdown" style="position: relative;">
+                <button class="icon" onclick="toggleUserDropdown()">Account ▾</button>
                 <div id="user-dropdown-menu" class="user-dropdown-menu">
                     <a href="{{ url_for('profile') }}">Profile</a>
                     <a href="{{ url_for('logout') }}">Logout</a>
                 </div>
             </div>
         </div>
-    </div>
+    </header>
 
-    <!-- Header Image Section -->
-    <div class="header-image">
-        <img src="https://images.pexels.com/photos/1303082/pexels-photo-1303082.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Gift Shop Banner">
-    </div>
+    <section class="hero">
+        <div class="hero-content">
+            <h1>"Restoring Balance via<br>Thoughtful Gifting."</h1>
+            <p>Explore the new collection of ethereal items designed to bring peace.</p>
+        </div>
+        <div class="scroll-indicator">Scroll to Explore</div>
+    </section>
 
-    <!-- Featured Products Section -->
-    <div class="random-products">
-        <h2> Featured Products</h2>
-        <div class="gift-grid">
+    <div class="random-products" id="featured-section">
+        <h2>Featured Collection</h2>
+        <div class="gift-grid" id="product-slider"> 
             {% for product in random_products %}
                 <div class="gift-item">
                     <img src="{{ url_for('static', filename=product['image_url'].replace('static/', '')) }}" alt="{{ product['name'] }}">
@@ -259,12 +388,30 @@
         </div>
     </div>
 
-    <!-- Footer Section -->
+    <div class="category-split">
+        <a href="{{ url_for('filter', category='men') }}" class="cat-card">
+            <img src="https://images.unsplash.com/photo-1512909006721-3d6018887383?q=80&w=800&auto=format&fit=crop" alt="For Him">
+            <div class="cat-overlay"></div>
+            <div class="cat-text">
+                <h3>For Him</h3>
+                <span>View Collection</span>
+            </div>
+        </a>
+
+        <a href="{{ url_for('filter', category='women') }}" class="cat-card">
+            <img src="https://images.unsplash.com/photo-1513885535751-8b9238bd345a?q=80&w=1000&auto=format&fit=crop" alt="For Her">
+            <div class="cat-overlay"></div>
+            <div class="cat-text">
+                <h3>For Her</h3>
+                <span>View Collection</span>
+            </div>
+        </a>
+    </div>
+
     <div class="footer">
         <p>&copy; 2024 GiftShop. All Rights Reserved.</p>
     </div>
 
-    <!-- JavaScript for Dropdowns -->
     <script>
         function toggleFiltersDropdown() {
             var dropdown = document.getElementById("filters-dropdown");
@@ -275,6 +422,38 @@
             var dropdown = document.getElementById("user-dropdown-menu");
             dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
         }
+
+      
+        const header = document.getElementById('main-header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        
+        const heroContent = document.querySelector('.hero-content');
+        window.addEventListener('scroll', () => {
+            const scrollPos = window.scrollY;
+            if (scrollPos < 600) {
+                const scaleValue = 1 + (scrollPos / 1000); 
+                const opacityValue = 1 - (scrollPos / 700);
+                heroContent.style.transform = `scale(${scaleValue})`;
+                heroContent.style.opacity = `${opacityValue}`;
+            }
+        });
+
+      
+        const slider = document.getElementById('product-slider');
+
+        slider.addEventListener('wheel', (evt) => {
+            if (evt.deltaY !== 0) {
+                evt.preventDefault(); 
+                slider.scrollLeft += evt.deltaY * 1.5; 
+            }
+        }, { passive: false });
     </script>
 </body>
 </html>

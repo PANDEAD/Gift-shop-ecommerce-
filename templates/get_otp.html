@@ -4,124 +4,192 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enter OTP - e Gift Shopee</title>
+    <title>Enter OTP | Curated</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
     <style>
-        body {
-            font-family: "Comic Sans MS", "Comic Sans", cursive;
-            background-image: url('https://images.pexels.com/photos/3309659/pexels-photo-3309659.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
-            background-size: cover;
-            background-position: center;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
+        
+        :root {
+            --bg-color: #fdfcf8; 
+            --text-main: #2b2b2b;
+            --text-muted: #6e6e6e;
+            --glass-bg: rgba(255, 255, 255, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            
+            
+            --orb-1: rgba(255, 196, 196, 0.55);
+            --orb-2: rgba(196, 219, 255, 0.55);
+            --orb-3: rgba(235, 196, 255, 0.55);
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        
+        .aura-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; overflow: hidden; pointer-events: none;
+        }
+        .orb {
+            position: absolute; border-radius: 50%;
+            filter: blur(80px);
+            animation: float 15s infinite ease-in-out alternate;
+        }
+        .orb-1 { width: 60vh; height: 60vh; background: var(--orb-1); top: -10%; left: -10%; }
+        .orb-2 { width: 50vh; height: 50vh; background: var(--orb-2); bottom: -10%; right: -5%; animation-delay: -5s; }
+        .orb-3 { width: 40vh; height: 40vh; background: var(--orb-3); top: 40%; left: 30%; opacity: 0.6; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, -30px) scale(1.1); }
+        }
+
+        
         .otp-container {
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            width: 350px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 420px;
             text-align: center;
             position: relative;
-            margin-left: 400px;
         }
 
         h1 {
+            font-family: 'Playfair Display', serif;
             font-size: 2em;
             margin-bottom: 10px;
-            color: #444;
+            color: var(--text-main);
+            font-weight: 500;
         }
 
+        .instruction {
+            font-size: 0.95em;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        
         .otp-boxes {
             display: flex;
             justify-content: space-between;
             margin: 20px 0;
+            gap: 10px;
         }
 
         .otp-box {
             width: 50px;
-            height: 50px;
+            height: 60px;
             font-size: 1.5em;
             text-align: center;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            background-color: white;
-            outline: none;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            transition: all 0.3s;
         }
 
         .otp-box:focus {
-            border-color: #f76c6c;
+            outline: none;
+            background: rgba(255, 255, 255, 0.9);
+            border-color: var(--text-main);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
 
+        
         .verify-btn {
-            background-color: #f09595;
+            background-color: var(--text-main);
             color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-size: 1em;
+            border: 1px solid var(--text-main);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
             cursor: pointer;
             width: 100%;
             margin-top: 20px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            transition: 0.3s;
             opacity: 0.5;
             pointer-events: none;
         }
 
-        .instruction {
-            font-size: 0.9em;
-            color: #666;
-            margin-bottom: 10px;
+        .verify-btn:hover {
+            background-color: transparent;
+            color: var(--text-main);
         }
 
         .timer {
             font-size: 0.9em;
-            color: #f76c6c;
+            color: #d64545; 
             margin-bottom: 10px;
+            font-weight: 500;
         }
 
         .resend-otp {
-            font-size: 0.9em;
-            color: #f76c6c;
+            background: none;
+            border: none;
+            font-size: 0.85em;
+            color: var(--text-muted);
             text-decoration: none;
             cursor: pointer;
             opacity: 0.5;
             pointer-events: none;
-            position: absolute;
-            bottom: 10px;
-            left: 20px;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
+            transition: 0.3s;
         }
 
         .resend-otp.active {
             opacity: 1;
             pointer-events: auto;
-        }
-        .flashes {
-            list-style-type: none;
-            padding: 10px;
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
-            margin: 10px 0;
-            position: absolute;  /* Positioned at the top of the page */
-            width: 100%;
-            top: 0;
-            z-index: 1000;  /* Ensure it is on top of other content */
-            left: 0;
-            text-align: center; /* Center-align text */
+            color: var(--text-main);
+            text-decoration: underline;
         }
 
+        
+        .flashes {
+            list-style-type: none; padding: 0;
+            position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 400px; z-index: 1000;
+        }
         .flash {
-            padding: 5px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 15px; border-radius: 8px;
+            margin-bottom: 10px; text-align: center;
+            border: 1px solid var(--glass-border);
+            color: #d64545; font-size: 0.9rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
     </style>
 </head>
 <body>
+
+    <div class="aura-container">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             <ul class="flashes">
@@ -131,9 +199,11 @@
             </ul>
         {% endif %}
     {% endwith %}
+
     <div class="otp-container">
         <h1>Enter OTP</h1>
-        <div class="instruction">Enter the OTP sent to your email.</div>
+        <div class="instruction">Please enter the verification code sent to your email.</div>
+        
         <div class="otp-boxes">
             <input type="text" maxlength="1" class="otp-box" oninput="moveFocus(0)" id="otp1">
             <input type="text" maxlength="1" class="otp-box" oninput="moveFocus(1)" id="otp2" disabled>
@@ -142,20 +212,23 @@
             <input type="text" maxlength="1" class="otp-box" oninput="moveFocus(4)" id="otp5" disabled>
             <input type="text" maxlength="1" class="otp-box" oninput="moveFocus(5)" id="otp6" disabled>
         </div>
+
         <div class="timer" id="timer">OTP valid for 3:00 minutes</div>
+
         <form method="POST" action="{{ url_for('get_otp') }}">
             <input type="hidden" id="otp" name="otp">
             <button type="submit" class="verify-btn" id="verify-btn">Verify OTP</button>
         </form>
+
         <form method="POST" action="{{ url_for('resend_otp') }}">
-            <button type="submit" class="resend-otp" id="resend-otp" disabled>Resend OTP</button>
+            <button type="submit" class="resend-otp" id="resend-otp" disabled>Resend Code</button>
         </form>
     </div>
 
     <script>
         let timerInterval;
 
-        // Timer function
+        
         function startTimer(duration, display) {
             let timer = duration, minutes, seconds;
             timerInterval = setInterval(function () {
@@ -171,8 +244,9 @@
                     clearInterval(timerInterval);
                     display.textContent = "OTP has expired.";
                     document.getElementById("verify-btn").disabled = true;
+                    document.getElementById("verify-btn").style.opacity = 0.5; 
                     document.getElementById("resend-otp").disabled = false;
-                    document.getElementById("resend-otp").classList.add("active"); // Enable Resend OTP
+                    document.getElementById("resend-otp").classList.add("active"); 
                 }
             }, 1000);
         }
@@ -191,7 +265,7 @@
             checkOTPComplete();
         }
 
-        // Enable button when all boxes are filled
+       
         function checkOTPComplete() {
             const otpComplete = Array.from(document.querySelectorAll('.otp-box')).every(box => box.value !== "");
             const verifyButton = document.getElementById("verify-btn");
@@ -199,7 +273,7 @@
                 verifyButton.style.opacity = 1;
                 verifyButton.style.pointerEvents = "auto";
 
-                // Manually concatenate the OTP values from each box
+               
                 const otpValue = document.getElementById("otp1").value +
                                 document.getElementById("otp2").value +
                                 document.getElementById("otp3").value +
@@ -208,7 +282,7 @@
                                 document.getElementById("otp6").value;
                 document.getElementById("otp").value = otpValue;
 
-                console.log("Concatenated OTP:", otpValue);  // Debug statement
+                console.log("Concatenated OTP:", otpValue);  
             } else {
                 verifyButton.style.opacity = 0.5;
                 verifyButton.style.pointerEvents = "none";
@@ -227,7 +301,8 @@
             const timeLeft = 3 * 60;
             const display = document.getElementById("timer");
             startTimer(timeLeft, display);
-            document.getElementById("verify-btn").disabled = false;
+            document.getElementById("verify-btn").disabled = false; 
+            checkOTPComplete(); 
         }
     </script>
 </body>

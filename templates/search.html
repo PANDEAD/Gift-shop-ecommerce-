@@ -3,98 +3,236 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Results - Gift Shop</title>
+    <title>Search Results | Curated</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
     <style>
-        /* General Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Comic Sans MS', cursive, sans-serif;
+        
+        :root {
+            --bg-color: #fdfcf8; 
+            --text-main: #2b2b2b;
+            --text-muted: #6e6e6e;
+            --glass-border: rgba(255, 255, 255, 0.6);
+            
+            
+            --orb-1: rgba(255, 196, 196, 0.55);
+            --orb-2: rgba(196, 219, 255, 0.55);
+            --orb-3: rgba(235, 196, 255, 0.55);
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            background-color: #ffdddd;
-            color: #333;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            display: flex; flex-direction: column;
         }
 
-        /* Container for search results */
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 500;
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        button { cursor: pointer; border: none; outline: none; }
+        
+        
+        .aura-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; overflow: hidden; pointer-events: none;
+        }
+        .orb {
+            position: absolute; border-radius: 50%;
+            filter: blur(80px);
+            animation: float 15s infinite ease-in-out alternate;
+        }
+        .orb-1 { width: 60vh; height: 60vh; background: var(--orb-1); top: -10%; left: -10%; }
+        .orb-2 { width: 50vh; height: 50vh; background: var(--orb-2); bottom: -10%; right: -5%; animation-delay: -5s; }
+        .orb-3 { width: 40vh; height: 40vh; background: var(--orb-3); top: 40%; left: 30%; opacity: 0.6; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, -30px) scale(1.1); }
+        }
+
+        
+        .header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 20px 40px;
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            transition: all 0.4s ease;
+            background: transparent;
+        }
+
+        .header.scrolled {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 15px 40px;
+        }
+
+        .header .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem; font-weight: 600; color: var(--text-main);
+        }
+
+        .header form {
+            display: flex; align-items: center;
+            border-bottom: 1px solid var(--text-main);
+            padding-bottom: 5px; margin: 0 40px;
+        }
+        .header input[type="text"] {
+            background: transparent; border: none;
+            color: inherit; font-family: 'Inter', sans-serif;
+            font-size: 1rem; width: 250px; padding: 5px;
+        }
+        .header input:focus { outline: none; }
+        .header button {
+            background: transparent; color: inherit;
+            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;
+            font-weight: 600; margin-left: 10px;
+        }
+
+        .icons { display: flex; align-items: center; gap: 25px; }
+        
+        .header-button, .filters-button, .icon {
+            background: transparent; font-size: 0.85rem;
+            font-family: 'Inter', sans-serif; color: var(--text-main);
+            padding: 0; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;
+        }
+        .header-button:hover, .filters-button:hover { opacity: 0.7; }
+
+       
+        .filters-dropdown, .user-dropdown-menu {
+            display: none; position: absolute; top: 150%; right: 0;
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+            min-width: 180px; box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid var(--glass-border); border-radius: 12px;
+            padding: 10px 0; z-index: 1001;
+        }
+        .filters-dropdown a, .user-dropdown-menu a {
+            display: block; padding: 12px 20px;
+            font-size: 0.85rem; color: var(--text-muted);
+        }
+        .filters-dropdown a:hover, .user-dropdown-menu a:hover {
+            background: rgba(0,0,0,0.03); color: var(--text-main);
+        }
+
+       
         .container {
-            padding: 20px;
-            text-align: center;
+            padding: 120px 40px 60px; 
+            flex: 1;
         }
+
         h1 {
-            color: #ff6f61;
-            font-size: 2.5rem;
-            margin-bottom: 20px;
+            font-size: 2.5rem; margin-bottom: 40px; text-align: center;
+            position: relative;
+        }
+        h1::after {
+            content: ""; display: block; width: 60px; height: 2px;
+            background: var(--text-main); margin: 20px auto 0; opacity: 0.2;
         }
 
-        /* Flash Messages */
-        .flashes {
-            list-style-type: none;
-            padding: 10px;
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
-            margin: 10px 0;
-        }
-        .flash {
-            padding: 5px;
-        }
-
-        /* Gift Grid */
+        
         .gift-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 20px;
-            padding: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 40px; padding: 20px;
         }
+
         .gift-item {
-            background-color: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            transition: transform 0.2s;
+            background: rgba(255, 255, 255, 0.4); 
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 0;
+            overflow: hidden; text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.03);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; flex-direction: column;
         }
+
         .gift-item:hover {
-            transform: scale(1.05);
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
         }
+
         .gift-item img {
-            width: 100%;
-            height: auto;
-            border-radius: 5px;
-            margin-bottom: 10px;
+            width: 100%; height: 350px; 
+            object-fit: cover; 
+            transition: transform 0.6s ease;
         }
+        .gift-item:hover img { transform: scale(1.05); }
+
+        .item-content { padding: 20px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+
         .gift-item h4 {
-            margin: 10px 0;
-            font-size: 1rem;
-            color: #333;
+            margin: 10px 0 5px; font-size: 1.1rem;
+            color: var(--text-main);
         }
         .gift-item .price {
-            color: #ff6f61;
-            font-weight: bold;
-            margin: 10px 0;
+            color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px;
+            font-family: 'Inter'; font-weight: 500;
         }
 
-        /* No Results Message */
+        .gift-item button {
+            background: transparent; border: 1px solid var(--text-main);
+            color: var(--text-main); padding: 12px 25px;
+            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px;
+            transition: 0.3s; width: 100%;
+        }
+        .gift-item button:hover {
+            background: var(--text-main); color: white;
+        }
+
+        
         .no-results {
-            font-size: 1.2rem;
-            color: #777;
-            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            padding: 40px; border-radius: 16px;
+            text-align: center; margin: 0 auto; max-width: 500px;
+            font-size: 1.2rem; color: var(--text-muted);
+            border: 1px solid var(--glass-border);
         }
 
-        /* Footer */
+        
         .footer {
-            text-align: center;
-            padding: 20px;
-            background-color: #ffdde1;
-            color: #333;
-            width: 100%;
+            padding: 40px; text-align: center;
+            background: white; color: var(--text-muted);
+            font-family: 'Inter'; font-size: 0.9rem;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            margin-top: auto;
+        }
+
+        
+        .flashes {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            z-index: 2000; list-style: none; width: 90%; max-width: 400px;
+        }
+        .flash {
+            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px);
+            padding: 15px; border-radius: 8px; margin-bottom: 10px;
+            text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid var(--glass-border);
         }
     </style>
 </head>
 <body>
-    <!-- Flash Messages -->
+
+    <div class="aura-container">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             <ul class="flashes">
@@ -105,7 +243,48 @@
         {% endif %}
     {% endwith %}
 
-    <!-- Search Results Container -->
+    <header class="header" id="main-header">
+        <a href="{{ url_for('main') }}" class="logo">GiftShop</a>
+        
+        <form action="{{ url_for('search') }}" method="GET">
+            <input type="text" name="query" placeholder="Search curated gifts..." required>
+            <button type="submit">Search</button>
+        </form>
+
+        <div class="icons">
+            <div class="dropdown" style="position: relative;">
+                <button class="filters-button" onclick="toggleFiltersDropdown()">Collections ▾</button>
+                <div id="filters-dropdown" class="filters-dropdown">
+                    {% for category in categories %}
+                        <a href="{{ url_for('filter', category=category) }}">{{ category }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+
+            {% if 'user_id' in session %}
+                <form action="{{ url_for('view_cart') }}" method="GET">
+                    <button class="header-button">Cart</button>
+                </form>
+            {% else %}
+                <form action="{{ url_for('login') }}" method="GET">
+                    <button class="header-button">Cart</button>
+                </form>
+            {% endif %}
+
+            <form action="#" method="GET">
+                <button class="header-button">Orders</button>
+            </form>
+
+            <div class="user-dropdown" style="position: relative;">
+                <button class="icon" onclick="toggleUserDropdown()">Account ▾</button>
+                <div id="user-dropdown-menu" class="user-dropdown-menu">
+                    <a href="{{ url_for('profile') }}">Profile</a>
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
     <div class="container">
         <h1>Search Results for "{{ query }}"</h1>
 
@@ -114,22 +293,49 @@
                 {% for product in search_results %}
                     <div class="gift-item">
                         <img src="{{ url_for('static', filename=product['image_url'].replace('static/', '')) }}" alt="{{ product['name'] }}">
-                        <h4>{{ product['name'] }}</h4>
-                        <p class="price">₹{{ product['price'] }}</p>
-                        <form method="POST" action="{{ url_for('add_to_cart', product_id=product['id']) }}">
-                            <button type="submit">Add to Cart</button>
-                        </form>
+                        <div class="item-content">
+                            <div>
+                                <h4>{{ product['name'] }}</h4>
+                                <p class="price">₹{{ product['price'] }}</p>
+                            </div>
+                            <form method="POST" action="{{ url_for('add_to_cart', product_id=product['id']) }}">
+                                <button type="submit">Add to Cart</button>
+                            </form>
+                        </div>
                     </div>
                 {% endfor %}
             </div>
         {% else %}
-            <p class="no-results">No products found. Try searching for something else.</p>
+            <div class="no-results">
+                <p>No products found. Try searching for something else.</p>
+            </div>
         {% endif %}
     </div>
 
-    <!-- Footer -->
     <div class="footer">
         <p>&copy; 2024 GiftShop. All Rights Reserved.</p>
     </div>
+
+    <script>
+        function toggleFiltersDropdown() {
+            var dropdown = document.getElementById("filters-dropdown");
+            dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+        }
+
+        function toggleUserDropdown() {
+            var dropdown = document.getElementById("user-dropdown-menu");
+            dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+        }
+
+        
+        const header = document.getElementById('main-header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+    </script>
 </body>
 </html>
