@@ -5,3 +5,4 @@ egift/
 .DS_Store
 pass.py
 .env
+e_gift_shop_dump.sql

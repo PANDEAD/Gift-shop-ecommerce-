@@ -350,9 +350,15 @@
                 </form>
             {% endif %}
 
-            <form action="#" method="GET">
-                <button class="header-button">Orders</button>
-            </form>
+            {% if 'user_id' in session %}
+                <form action="{{ url_for('orders') }}" method="GET">
+                    <button class="header-button">Orders</button>
+                </form>
+            {% else %}
+                <form action="{{ url_for('login') }}" method="GET">
+                    <button class="header-button">Orders</button>
+                </form>
+            {% endif %}
 
             <div class="user-dropdown" style="position: relative;">
                 <button class="icon" onclick="toggleUserDropdown()">Account ▾</button>
